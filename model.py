@@ -20,71 +20,61 @@ db = SQLAlchemy()
 class Politician(db.Model):
     """Politicians of flashcard database"""
 
-    ___tablename___ = "politicians"
+    __tablename__ = "politicians"
 
-    pol_id = db.Column(db.String(50), primary_key=True)
+    id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     title = db.Column(db.String(100), nullable=False)
     district = db.Column(db.String(100), nullable=False)
-    party_id = db.Column(db.String(3), db.ForeignKey('parties.party_id'), nullable=False)
+    party_name = db.Column(db.String(50), nullable=False)
     photo_url = db.Column(db.String(140), nullable=False)
+    bioguide_id = db.Column(db.String(50), nullable=False, unique=True)
 
-    party = db.relationship('Party',
-                            backref="politicians")
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Politician politician_id=%s name=%s title=%s>" % (self.pol_id,
+        return "<Politician politician_id=%s name=%s title=%s>" % (self.id,
                                                                    self.name,
                                                                    self.title)
 
+class QuestionSet(db.Model):
+    """Set of questions."""
 
-class Party(db.Model):
-    """Parties of flashcard database"""
+    __tablename__ = "question_sets"
 
-    ___tablename___ = "parties"
-
-    party_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    party_name = db.Column(db.String(50), nullable=False)
-
-    def __repr__(self):
-        """Provide helpful representation when printed."""
-
-        return "<Party party_id=%s party_name=%s>" % (self.party_id,
-                                                      self.party_name)
-
-
-class Flashcard(db.Model):
-    """Flashcard with a politician and a field."""
-
-    flashcard_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    pol_id = db.Column(db.Integer, db.ForeignKey('politicians.pol_id'), nullable=False)
-    type_id = db.Column(db.Integer, db.ForeignKey('type.type_id'), nullable=False)
-
-    politician = db.relationship('Politician',
-                                 backref="flashcards")
-    flashcard_type = db.relationship('Type',
-                                     backref="flashcards")
-
-    def __repr__(self):
-        """Provide helpful representation when printed."""
-
-        return "<Flashcard flashcard_id=%s pol_id=%s flashcard_type=%s>" % (self.flashcard_id,
-                                                                                   self.pol_id,
-                                                                                   self.type_id)
-
-
-class Type(db.Model):
-    """Type of personal info."""
-
-    type_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     field = db.Column(db.String(50), nullable=False)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Type type_id=%s field=%s>" % (self.type_id, self.field)
+        return "<QuestionSet id=%s field=%s>" % (self.id, self.field)
+
+
+class Question(db.Model):
+    """Question with a politician and a field."""
+
+    __tablename__ = "questions"
+
+    id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    politician_id = db.Column(db.Integer, db.ForeignKey('politicians.id'), nullable=False)
+    question_set_id = db.Column(db.Integer, db.ForeignKey('question_sets.id'), nullable=False)
+
+    politician = db.relationship('Politician',
+                                 backref="questions")
+    question_set = db.relationship('QuestionSet',
+                                     backref="questions")
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<Question id=%s politician_id=%s question_set_id=%s>" % (self.id,
+                                                                         self.politician_id,
+                                                                         self.question_set_id)
+
+
+
 
 
 def connect_to_db(app):

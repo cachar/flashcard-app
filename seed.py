@@ -1,7 +1,7 @@
 """Utility file to seed politician info database from Sunlight Foundation API"""
 
 from sqlalchemy import func
-from model import Politician, Party, Flashcard, Type
+from model import Politician
 
 from model import connect_to_db, db
 from server import app
@@ -39,7 +39,7 @@ def get_congress_legislators(HACKBRIGHT_LATITUDE=HACKBRIGHT_LATITUDE,
     jdict = r.json()
 
     for result in jdict["results"]:
-        pol_id = result['bioguide_id']
+        bioguide_id = result['bioguide_id']
         name = result['first_name'] + result['last_name']
         party = result['party']
         title = result['title']
@@ -48,7 +48,7 @@ def get_congress_legislators(HACKBRIGHT_LATITUDE=HACKBRIGHT_LATITUDE,
         if district is None:
             district = result['state_name']
 
-        politician = Politician(pol_id=pol_id,
+        politician = Politician(bioguide_id=bioguide_id,
                                 name=name,
                                 title=title,
                                 district=district,
