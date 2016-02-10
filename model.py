@@ -7,16 +7,6 @@ db = SQLAlchemy()
 
 #Model definitions
 
-# class Person(db.Model):
-#     """People in the Star Trek TNG main cast."""
-
-#     person_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-#     serial_number = db.Column(db.String(50), nullable=False, unique=True)
-#     rank = db.Column(db.String(50))
-#     actor = db.Column(db.String(50))
-#     home
-#     photo_url = pass
-
 
 class Politician(db.Model):
     """Politicians of flashcard database"""
@@ -29,14 +19,12 @@ class Politician(db.Model):
     constituency = db.Column(db.String(100), nullable=False)
     party = db.Column(db.String(50), nullable=False)
     bioguide_id = db.Column(db.String(50), nullable=False, unique=True)
+    photo_url = db.Column(db.String(150), nullable=False, unique=True)
 
 
-    def photo_url(self):
-        return 'https://theunitedstates.io/images/congress/225x275/' + self.bioguide_id + '.jpg'
-
-    @classmethod
-    def questionable_field(cls):
-        return random.choice(["name", "title", "constituency", "party"])
+    # @classmethod
+    # def questionable_field(cls):
+    #     return random.choice(["name", "title", "constituency", "party"])
 
     def __repr__(self):
         """Provide helpful representation when printed."""

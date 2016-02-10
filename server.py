@@ -13,7 +13,7 @@ app.jinja_env.undefined = StrictUndefined
 
 @app.route('/')
 def landing_page():
-    return render_template("about.html")
+    return render_template("homepage.html")
 
 @app.route('/card_decks', methods=["GET"])
 def show_card_decks():
@@ -24,11 +24,20 @@ def show_card_decks():
 @app.route('/card_decks', methods=["POST"])
 def create_card_deck():
     
-    card_deck= CardDeck(field=Politician.questionable_field())
-    politician = Politician.query.get(1)
-    card = PoliticianCard(card_deck=card_deck, politician=politician)
-    #make many politician_cards
-    db.session.add(card)
+    #card_deck= CardDeck(field=Politician.questionable_field())
+
+
+    fields = ["name", "title", "constituency", "party"]
+    for field in fields:
+        card_deck = CardDeck(field=field)
+
+        politicians = Politician.query.all()
+        for politician in politicians:
+            card = PoliticianCard(card_deck=card_deck, politician=politician)
+            db.session.add(card)
+
+
+
 
     db.session.add(card_deck)
     db.session.commit()
