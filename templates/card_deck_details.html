@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Cards of politicians by {{ card_deck.field }}</h2>
+
+{% for card in card_deck.politician_cards %}
+<li>{{ card.politician.name }}</li>
+{% endfor %}
+
+{% endblock %}

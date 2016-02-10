@@ -6,7 +6,7 @@
 <h2>Card Deck</h2>
 <ul>
 {%for card_deck in card_decks%}
-    <li>{{ card_deck }}</li>
+    <li><a href="/card_decks/{{ card_deck.id }}">{{ card_deck }}</a></li>
 {% endfor %}
 </ul>
 
