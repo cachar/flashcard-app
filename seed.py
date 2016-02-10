@@ -20,6 +20,8 @@ HACKBRIGHT_LONGITUDE = "-122.411462"
 #    pass
 
 
+
+
 def get_congress_legislators(HACKBRIGHT_LATITUDE=HACKBRIGHT_LATITUDE,
                              HACKBRIGHT_LONGITUDE=HACKBRIGHT_LONGITUDE,
                              SUNLIGHT_API_KEY=SUNLIGHT_API_KEY):
@@ -40,22 +42,25 @@ def get_congress_legislators(HACKBRIGHT_LATITUDE=HACKBRIGHT_LATITUDE,
 
     for result in jdict["results"]:
         bioguide_id = result['bioguide_id']
-        name = result['first_name'] + result['last_name']
+        name = result['first_name'] + " " + result['last_name']
         party = result['party']
         title = result['title']
-        photo_url = 'https://theunitedstates.io/images/congress/225x275/' + pol_id + '.jpg'
-        district = result['district']
-        if district is None:
-            district = result['state_name']
+        constituency = result['district'] or result['state_name']
 
-        politician = Politician(bioguide_id=bioguide_id,
-                                name=name,
-                                title=title,
-                                district=district,
-                                party_id=party,
-                                photo_url=photo_url)
+        politician = Politician.query.filter(Politician.bioguide_id == bioguide_id).first()
 
-        db.session.add(politician)
+        if politician == None:
+            politician = Politician(bioguide_id=bioguide_id,
+                                    name=name,
+                                    title=title,
+                                    constituency=constituency,
+                                    party=party)
+            db.session.add(politician)
+        else:
+            politician.name = name
+            politician.party = party
+            politician.title = title
+            politician.constituency = constituency
 
     db.session.commit()
 

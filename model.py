@@ -25,11 +25,13 @@ class Politician(db.Model):
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     title = db.Column(db.String(100), nullable=False)
-    district = db.Column(db.String(100), nullable=False)
-    party_name = db.Column(db.String(50), nullable=False)
-    photo_url = db.Column(db.String(140), nullable=False)
+    constituency = db.Column(db.String(100), nullable=False)
+    party = db.Column(db.String(50), nullable=False)
     bioguide_id = db.Column(db.String(50), nullable=False, unique=True)
 
+
+    def photo_url(self):
+        return 'https://theunitedstates.io/images/congress/225x275/' + self.bioguide_id + '.jpg'
 
     def __repr__(self):
         """Provide helpful representation when printed."""
