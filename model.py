@@ -1,6 +1,7 @@
 """Models and database functions for Flashcard project."""
 
 from flask_sqlalchemy import SQLAlchemy
+import random
 
 db = SQLAlchemy()
 
@@ -33,6 +34,10 @@ class Politician(db.Model):
     def photo_url(self):
         return 'https://theunitedstates.io/images/congress/225x275/' + self.bioguide_id + '.jpg'
 
+    @classmethod
+    def questionable_field(cls):
+        return random.choice(["name", "title", "constituency", "party"])
+
     def __repr__(self):
         """Provide helpful representation when printed."""
 
@@ -40,10 +45,10 @@ class Politician(db.Model):
                                                                    self.name,
                                                                    self.title)
 
-class QuestionSet(db.Model):
+class CardDeck(db.Model):
     """Set of questions."""
 
-    __tablename__ = "question_sets"
+    __tablename__ = "card_decks"
 
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     field = db.Column(db.String(50), nullable=False)
@@ -51,29 +56,29 @@ class QuestionSet(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<QuestionSet id=%s field=%s>" % (self.id, self.field)
+        return "<CardDeck id=%s field=%s>" % (self.id, self.field)
 
 
-class Question(db.Model):
+class PoliticianCard(db.Model):
     """Question with a politician and a field."""
 
-    __tablename__ = "questions"
+    __tablename__ = "politician_cards"
 
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     politician_id = db.Column(db.Integer, db.ForeignKey('politicians.id'), nullable=False)
-    question_set_id = db.Column(db.Integer, db.ForeignKey('question_sets.id'), nullable=False)
+    card_deck_id = db.Column(db.Integer, db.ForeignKey('card_decks.id'), nullable=False)
 
     politician = db.relationship('Politician',
-                                 backref="questions")
-    question_set = db.relationship('QuestionSet',
-                                     backref="questions")
+                                 backref="politician_cards")
+    card_deck = db.relationship('CardDeck',
+                                     backref="politician_cards")
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Question id=%s politician_id=%s question_set_id=%s>" % (self.id,
+        return "<PoliticianCard id=%s politician_id=%s card_deck_id=%s>" % (self.id,
                                                                          self.politician_id,
-                                                                         self.question_set_id)
+                                                                         self.card_deck_id)
 
 
 
