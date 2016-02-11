@@ -34,7 +34,7 @@ def create_card_deck():
             card_deck = CardDeck(field=field)
 
             politicians = Politician.query.options(db.joinedload('politician_cards')).all()
-            print "politicians is ", politicians
+            
 
             for politician in politicians:
                 card = PoliticianCard(card_deck=card_deck, politician=politician, field=field)
@@ -53,9 +53,6 @@ def create_card_deck():
 def show_card_deck(id):
 
     card_deck = CardDeck.query.get(id)
-    field = card_deck.field
-    for card in card_deck.politician_cards:
-        card.politician['display'] = card.politician.field
     # import pdb
     # pdb.set_trace()
     return render_template("card_deck_details.html", card_deck=card_deck, field=card_deck.field)
