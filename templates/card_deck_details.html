@@ -4,7 +4,7 @@
 <h2>Cards of politicians by {{ card_deck.field }}</h2>
 
 {% for card in card_deck.politician_cards %}
-<li>{{ card.politician.name }}</li>
+<li><img src="{{ card.politician.photo_url }}"> {{ card.politian.display }}  </li>
 {% endfor %}
 
 {% endblock %}

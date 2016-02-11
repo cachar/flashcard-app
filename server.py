@@ -29,17 +29,22 @@ def create_card_deck():
 
     fields = ["name", "title", "constituency", "party"]
     for field in fields:
-        card_deck = CardDeck(field=field)
+        if CardDeck.query.filter(CardDeck.field == field).first() == None:
 
-        politicians = Politician.query.all()
-        for politician in politicians:
-            card = PoliticianCard(card_deck=card_deck, politician=politician)
-            db.session.add(card)
+            card_deck = CardDeck(field=field)
+
+            politicians = Politician.query.options(db.joinedload('politician_cards')).all()
+            print "politicians is ", politicians
+
+            for politician in politicians:
+                card = PoliticianCard(card_deck=card_deck, politician=politician, field=field)
+
+                db.session.add(card)
 
 
 
 
-    db.session.add(card_deck)
+            db.session.add(card_deck)
     db.session.commit()
 
     return redirect('/card_decks')
@@ -48,8 +53,12 @@ def create_card_deck():
 def show_card_deck(id):
 
     card_deck = CardDeck.query.get(id)
-
-    return render_template("card_deck_details.html", card_deck=card_deck)
+    field = card_deck.field
+    for card in card_deck.politician_cards:
+        card.politician['display'] = card.politician.field
+    # import pdb
+    # pdb.set_trace()
+    return render_template("card_deck_details.html", card_deck=card_deck, field=card_deck.field)
 
 
 

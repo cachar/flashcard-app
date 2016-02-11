@@ -55,6 +55,8 @@ class PoliticianCard(db.Model):
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     politician_id = db.Column(db.Integer, db.ForeignKey('politicians.id'), nullable=False)
     card_deck_id = db.Column(db.Integer, db.ForeignKey('card_decks.id'), nullable=False)
+    field = db.Column(db.String(50), nullable=False)
+
 
     politician = db.relationship('Politician',
                                  backref="politician_cards")
@@ -64,9 +66,9 @@ class PoliticianCard(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<PoliticianCard id=%s politician_id=%s card_deck_id=%s>" % (self.id,
+        return "<PoliticianCard id=%s politician_id=%s field=%s>" % (self.id,
                                                                          self.politician_id,
-                                                                         self.card_deck_id)
+                                                                         self.card_deck.field)
 
 
 
