@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Learn People!</h1>
+
+<form action="/card_decks" method="post">
+    {%for field in fields %}
+      <input type="submit" name="field" value={{ field }}>
+    {% endfor %}
+</form>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<img src="{{ card.politician.photo_url }}">
+
+<form action="/cards/{{card.id}}" method="post">
+  {% for answer in card.possible_answers() %}
+    <input type="submit" name="answer" value="{{ answer }}">
+  {% endfor %}
+</form>
+
+{% endblock %}

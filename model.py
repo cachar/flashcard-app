@@ -1,7 +1,7 @@
 """Models and database functions for Flashcard project."""
 
 from flask_sqlalchemy import SQLAlchemy
-import random
+from sqlalchemy.orm import validates
 
 db = SQLAlchemy()
 
@@ -22,9 +22,20 @@ class Politician(db.Model):
     photo_url = db.Column(db.String(150), nullable=False, unique=True)
 
 
-    # @classmethod
-    # def questionable_field(cls):
-    #     return random.choice(["name", "title", "constituency", "party"])
+    @classmethod
+    def questionable_fields(cls):
+        return ["name", "title", "constituency", "party"]
+
+    def value(self, field):
+        if field == "name":
+            return self.name
+        elif field == "title":
+            return self.title
+        elif field == "constituency":
+            return self.constituency
+        elif field == "party":
+            return self.party
+
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -41,6 +52,22 @@ class CardDeck(db.Model):
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     field = db.Column(db.String(50), nullable=False)
 
+    @validates('field')
+    def validate_field(self, key, field):
+        assert field in Politician.questionable_fields()
+        return field
+
+    def score(self):
+        computed_score = 0
+        for card in self.politician_cards:
+            if card.correct():
+                computed_score += 1
+
+        return computed_score
+
+    def card_count(self):
+        return PoliticianCard.query.filter_by(card_deck_id=self.id).count()
+
     def __repr__(self):
         """Provide helpful representation when printed."""
 
@@ -56,12 +83,21 @@ class PoliticianCard(db.Model):
     politician_id = db.Column(db.Integer, db.ForeignKey('politicians.id'), nullable=False)
     card_deck_id = db.Column(db.Integer, db.ForeignKey('card_decks.id'), nullable=False)
     field = db.Column(db.String(50), nullable=False)
+    answer = db.Column(db.String(100), nullable=True)
 
 
     politician = db.relationship('Politician',
                                  backref="politician_cards")
     card_deck = db.relationship('CardDeck',
                                      backref="politician_cards")
+    def possible_answers(self):
+        right_answer = self.politician.value(self.field)
+        wrong_answers = [p.value(self.field) for p in Politician.query.all()]
+        wrong_answers.remove(right_answer)
+        return [right_answer] + wrong_answers[0:3]
+
+    def correct(self):
+        return self.answer == self.politician.value(self.field)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -86,4 +122,4 @@ if __name__ == '__main__':
     from server import app
     connect_to_db(app)
     print "Connected to DB"
-
+    print PoliticianCard.query.get(1).possible_answers()
