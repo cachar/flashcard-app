@@ -7,11 +7,10 @@ from model import connect_to_db, db
 from server import app
 
 import requests
-#import sunlight
-#from server import app
-#import datetime
-#sunlight.config.API_KEY = "19a86558186a4bf8857e67e56f6c9f88"
-SUNLIGHT_API_KEY = "19a86558186a4bf8857e67e56f6c9f88"
+import os
+
+#SUNLIGHT_API_KEY = "19a86558186a4bf8857e67e56f6c9f88"
+SUNLIGHT_API_KEY = os.environ['SUNLIGHT_API_KEY']
 HACKBRIGHT_LATITUDE = "37.788666"
 HACKBRIGHT_LONGITUDE = "-122.411462"
 
@@ -103,6 +102,7 @@ def get_state_reps(HACKBRIGHT_LATITUDE=HACKBRIGHT_LATITUDE,
         elif party == "Republican":
             party = "R"
         constituency = result["state"] + " " + result["district"]
+        constituency = (constituency).upper()
         photo_url = result["photo_url"] 
         if name == "Mark Leno":
             photo_url = "https://upload.wikimedia.org/wikipedia/commons/4/4f/Mark_Leno.jpg"
