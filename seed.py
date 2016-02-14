@@ -45,6 +45,10 @@ def get_congress_legislators(HACKBRIGHT_LATITUDE=HACKBRIGHT_LATITUDE,
         name = result['first_name'] + " " + result['last_name']
         party = result['party']
         title = result['title']
+        if title == "Sen":
+            title = "Senator"
+        elif title == "Rep":
+            title = "Representative"
         constituency = result['district'] or result['state_name']
         photo_url = 'https://theunitedstates.io/images/congress/225x275/' + bioguide_id + '.jpg'
 

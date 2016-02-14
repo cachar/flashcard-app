@@ -93,7 +93,14 @@ class PoliticianCard(db.Model):
     def possible_answers(self):
         right_answer = self.politician.value(self.field)
         wrong_answers = [p.value(self.field) for p in Politician.query.all()]
+        wrong_answers = list(set(wrong_answers))
         wrong_answers.remove(right_answer)
+        if wrong_answers == []:
+            if self.field == "party":
+                if right_answer == "D":
+                    wrong_answers = ["R"]
+                else:
+                    wrong_answers = ["D"]
         return [right_answer] + wrong_answers[0:3]
 
     def correct(self):
