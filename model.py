@@ -90,6 +90,10 @@ class PoliticianCard(db.Model):
                                  backref="politician_cards")
     card_deck = db.relationship('CardDeck',
                                      backref="politician_cards")
+
+    def right_answer(self):
+        return self.politician.value(self.field)
+
     def possible_answers(self):
         right_answer = self.politician.value(self.field)
         wrong_answers = [p.value(self.field) for p in Politician.query.all()]

@@ -4,7 +4,20 @@
 <h1>Learn People!</h1>
 
 <h2>Card Deck</h2>
-<p><a href="/card_decks">View all card decks</a></p>
-<p><a href="/card_decks/new">Make a new deck</a></p>
+
+<p><a href="/notes">Notes</p>
+
+<p>
+    <form action="/card_decks/new" method="get">
+        <input type="hidden" name="mode" value="Flashcard">
+        <input type="submit" value="Flashcard">
+    </form>
+</p>
+<p>
+    <form action="/card_decks/new">
+        <input type="hidden" name="mode" value="Quiz">
+        <input type="submit" value="Quiz">
+    </form>
+</p>
 
 {% endblock %}

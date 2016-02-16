@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, session, flash
 from model import *
 from flask_debugtoolbar import DebugToolbarExtension
 
@@ -15,16 +15,14 @@ app.jinja_env.undefined = StrictUndefined
 def landing_page():
     return render_template("homepage.html")
 
-@app.route('/card_decks', methods=["GET"])
-def show_card_decks():
-    fields = Politician.questionable_fields()
-    card_decks = CardDeck.query.all()
-    return render_template("card_decks.html", card_decks=card_decks, fields=fields)
 
 @app.route('/card_decks/new', methods=["GET"])
 def new_card_deck():
+    mode = request.args.get("mode")
+    session["mode"] = mode
+    print mode
     fields = Politician.questionable_fields()
-    return render_template("new_card_deck.html", fields=fields)
+    return render_template("new_card_deck.html", fields=fields, mode=mode)
 
 @app.route('/card_decks', methods=["POST"])
 def create_card_deck():
@@ -48,33 +46,25 @@ def show_card_deck(id):
 
     card = PoliticianCard.query.filter_by(card_deck_id=id, answer=None).first()
     if card == None:
-
-        return redirect("/card_decks/%s/score" % id)
+        if session["mode"] == "Quiz":
+            return redirect("/card_decks/%s/score" % id)
+        elif session["mode"] == "Flashcard":
+            flash("End of flashcards")
+            redirect('/')
     else:
         return redirect('/cards/%s' % card.id)
 
-@app.route('/card_decks/<int:id>/score', methods=["GET"])
-def show_score(id):
 
-    card_deck = CardDeck.query.get(id)
-    return render_template("score.html", card_deck=card_deck)
-
-
-
-@app.route('/card_decks/<int:id>/cards', methods=["GET"])
-def show_card_deck_cards(id):
-
-    card_deck = CardDeck.query.get(id)
-    # import pdb
-    # pdb.set_trace()
-    return render_template("card_deck_details.html", card_deck=card_deck, field=card_deck.field)
 
 @app.route('/cards/<int:id>', methods=["GET"])
 def show_card(id):
 
     card = PoliticianCard.query.get(id)
+    mode = session["mode"]
 
-    return render_template("card_details.html", card=card)
+    return render_template("card_details.html", card=card, mode=mode)
+
+
 
 @app.route('/cards/<int:id>', methods=["POST"])
 def create_card_answer(id):
@@ -86,6 +76,24 @@ def create_card_answer(id):
     db.session.commit()
 
     return redirect('/card_decks/%s' % card.card_deck.id)
+
+
+
+@app.route('/card_decks/<int:id>/score', methods=["GET"])
+def show_score(id):
+
+    card_deck = CardDeck.query.get(id)
+    return render_template("score.html", card_deck=card_deck)
+
+
+
+# @app.route('/card_decks/<int:id>/cards', methods=["GET"])
+# def show_card_deck_cards(id):
+
+#     card_deck = CardDeck.query.get(id)
+#     return render_template("card_deck_details.html", card_deck=card_deck, field=card_deck.field)
+
+
 
 
 if __name__ == "__main__":

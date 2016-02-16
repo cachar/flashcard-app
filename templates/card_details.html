@@ -3,10 +3,20 @@
 
 <img src="{{ card.politician.photo_url }}">
 
+{% if mode == "Quiz" %}
 <form action="/cards/{{card.id}}" method="post">
   {% for answer in card.possible_answers() %}
     <input type="submit" name="answer" value="{{ answer }}">
   {% endfor %}
 </form>
+{% elif mode == "Flashcard" %}
+{{ card.right_answer() }}
+    <form action="/cards/{{card.id}}" method="post">
+        <input type="hidden" name="answer" value="flashcard">
+        <input type="submit" value="Next">
+    </form>
+{% endif %}
+
+
 
 {% endblock %}
