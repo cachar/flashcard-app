@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Learn your Representatives!</h1>
+
+{% for politician in politicians %}
+<img src="{{ politician.photo_url }}">
+<br>
+Name: {{ politician.name }}<br>
+Title: {{ politician.title }}<br>
+Constituency: {{ politician.constituency }}<br>
+Party: {{ politician.party }}<br>
+<p></p>
+
+{% endfor %}
+
+
+
+
+
+<div id="person">
+    {{ notes }}
+
+    <input type="button" id="next" value="Next">
+
+</div>
+
+<a href="/">Home</a>
+
+<script src="https://code.jquery.com/jquery.js"></script>
+<script type="text/javascript">
+"use strict";
+
+var i = 0;
+while (i < politicians.length) {
+    
+}
+
+
+
+</script>
+{% endblock %}

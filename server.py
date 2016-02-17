@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, session, flash
+from flask import Flask, render_template, redirect, request, session, flash, jsonify
 from model import *
 from flask_debugtoolbar import DebugToolbarExtension
 
@@ -87,11 +87,27 @@ def show_score(id):
 
 
 
-# @app.route('/card_decks/<int:id>/cards', methods=["GET"])
-# def show_card_deck_cards(id):
+@app.route('/notes', methods=["GET"])
+def show_notes():
+    politicians = Politician.query.all()
+    pol_info = []
+    for politician in politicians:
+        politician.id = {
+            'name' : politician.name,
+            'title' : politician.title,
+            'constituency' : politician.constituency,
+            'party' : politician.party,
+            'photo_url' : politician.photo_url
+        }
+        pol_info.append(politician.id)
 
-#     card_deck = CardDeck.query.get(id)
-#     return render_template("card_deck_details.html", card_deck=card_deck, field=card_deck.field)
+    notes = {"info": pol_info}
+    notes = jsonify(notes)
+
+
+
+
+    return render_template("notes.html", notes=notes, politicians=politicians)
 
 
 
