@@ -49,8 +49,8 @@ def show_card_deck(id):
         if session["mode"] == "Quiz":
             return redirect("/card_decks/%s/score" % id)
         elif session["mode"] == "Flashcard":
-            flash("End of flashcards")
-            redirect('/')
+            flash("End of flashcards!")
+            return redirect('/')
     else:
         return redirect('/cards/%s' % card.id)
 

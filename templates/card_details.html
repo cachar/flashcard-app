@@ -1,22 +1,46 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<img src="{{ card.politician.photo_url }}">
 
 {% if mode == "Quiz" %}
+<img src="{{ card.politician.photo_url }}">
+
 <form action="/cards/{{card.id}}" method="post">
   {% for answer in card.possible_answers() %}
     <input type="submit" name="answer" value="{{ answer }}">
   {% endfor %}
 </form>
 {% elif mode == "Flashcard" %}
-{{ card.right_answer() }}
+
+<div id="flashcard">
+    <img id="flashcard-picture" src="{{ card.politician.photo_url }}">
+    <input type="button" id="flashcard-text" value="{{ card.right_answer() }}">
+</div>
     <form action="/cards/{{card.id}}" method="post">
         <input type="hidden" name="answer" value="flashcard">
         <input type="submit" value="Next">
     </form>
 {% endif %}
 
+<!-- put separate ids on img and text,
+then toggle hide/show on both. -->
 
 
+<script src="https://code.jquery.com/jquery.js"></script>
+<script type="text/javascript">
+"use strict";
+
+var flashcard = $('#flashcard');
+var picture = $('#flashcard-picture');
+var info = $('#flashcard-text');
+info.hide();
+
+flashcard.click(function() {
+    picture.toggle();
+    info.toggle();
+    }
+);
+
+
+</script>
 {% endblock %}
