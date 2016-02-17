@@ -1,42 +1,59 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<style type="text/css">
+.reviewed,
+.unreviewed + .unreviewed,
+.unreviewed + #done {
+  display: none;
+}
+.unreviewed {
+  display: block;
+}
+</style>
+
 <h1>Learn your Representatives!</h1>
 
 {% for politician in politicians %}
+<div class="card unreviewed">
 <img src="{{ politician.photo_url }}">
 <br>
-Name: {{ politician.name }}<br>
-Title: {{ politician.title }}<br>
-Constituency: {{ politician.constituency }}<br>
-Party: {{ politician.party }}<br>
-<p></p>
-
-{% endfor %}
-
-
-
-
-
-<div id="person">
-    {{ notes }}
-
-    <input type="button" id="next" value="Next">
+{{ politician.name }}, {{ politician.party }}<br>
+{{ politician.title }} for {{ politician.constituency }}<br>
 
 </div>
 
-<a href="/">Home</a>
+{% endfor %}
 
-<script src="https://code.jquery.com/jquery.js"></script>
+<div id="done">Congrats, you're done studying! <a href="/">Home</a></div>
+
+
+
+<input type="button" id="back" value="Back">
+<input type="button" id="next" value="Next">
+
+
+
+
+
+
+
 <script type="text/javascript">
 "use strict";
+document.getElementById('next').onclick = function () {
+  var unreviewed = document.getElementsByClassName('unreviewed');
+  if (unreviewed.length > 0){
+    unreviewed[0].className = 'card reviewed';
 
-var i = 0;
-while (i < politicians.length) {
-    
+  }
+};
+
+document.getElementById('back').onclick = function () {
+  var reviewed = document.getElementsByClassName('reviewed');
+  if (reviewed.length > 0){
+    reviewed[reviewed.length - 1].className = 'card unreviewed';
+  }
 }
-
-
 
 </script>
 {% endblock %}

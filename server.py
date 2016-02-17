@@ -20,7 +20,6 @@ def landing_page():
 def new_card_deck():
     mode = request.args.get("mode")
     session["mode"] = mode
-    print mode
     fields = Politician.questionable_fields()
     return render_template("new_card_deck.html", fields=fields, mode=mode)
 

@@ -46,9 +46,10 @@ def get_congress_legislators(HACKBRIGHT_LATITUDE=HACKBRIGHT_LATITUDE,
         title = result['title']
         if title == "Sen":
             title = "Senator"
+            constituency = result['state_name']
         elif title == "Rep":
             title = "Representative"
-        constituency = result['district'] or result['state_name']
+            constituency = result['state_name'] + " district " + str(result['district'])
         photo_url = 'https://theunitedstates.io/images/congress/225x275/' + bioguide_id + '.jpg'
 
         politician = Politician.query.filter(Politician.bioguide_id == bioguide_id).first()
@@ -74,7 +75,7 @@ def get_congress_legislators(HACKBRIGHT_LATITUDE=HACKBRIGHT_LATITUDE,
 def get_state_reps(HACKBRIGHT_LATITUDE=HACKBRIGHT_LATITUDE,
                    HACKBRIGHT_LONGITUDE=HACKBRIGHT_LONGITUDE,
                    SUNLIGHT_API_KEY=SUNLIGHT_API_KEY):
-    
+
     payload = {"server": "nginx/1.4.1 (Ubuntu)",
                "content-type": "application/json; charset=utf-8",
                "vary": "Authorization",
@@ -89,28 +90,23 @@ def get_state_reps(HACKBRIGHT_LATITUDE=HACKBRIGHT_LATITUDE,
     url = "http://openstates.org/api/v1//legislators/geo/?lat=%s&long=%s&apikey=%s" % (HACKBRIGHT_LATITUDE,
                                                                                        HACKBRIGHT_LONGITUDE,
                                                                                        SUNLIGHT_API_KEY)
-    
+
     r = requests.get(url, params=payload)
     jdict = r.json()
 
     for result in jdict:
         name = result["full_name"]
         bioguide_id = result["leg_id"]
-        party = result["party"]
-        if party == "Democratic":
-            party = "D"
-        elif party == "Republican":
-            party = "R"
-        constituency = result["state"] + " " + result["district"]
-        constituency = (constituency).upper()
-        photo_url = result["photo_url"] 
+        party = result["party"][0]
+        photo_url = result["photo_url"]
         if name == "Mark Leno":
             photo_url = "https://upload.wikimedia.org/wikipedia/commons/4/4f/Mark_Leno.jpg"
 
-        if result["sources"] == [{"url": "http://assembly.ca.gov/assemblymembers"}]:
+        if result["chamber"] == "lower":
             title = "Assemblymember"
-        elif result["sources"] == [{"url": "http://senate.ca.gov/senators"}]:
+        elif result["chamber"] == "upper":
             title = "Senator"
+        constituency = result["state"].upper() + " state district " + result["district"]
 
         politician = Politician.query.filter(Politician.bioguide_id == bioguide_id).first()
 
@@ -153,7 +149,7 @@ def hard_code_pres_and_vp():
 
 def load_politicians():
     """Load politicians from Sunlight Foundation API."""
-    
+
     # Get federal congressional representatives.
     get_congress_legislators()
     get_state_reps()
