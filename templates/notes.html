@@ -10,27 +10,90 @@
 .unreviewed {
   display: block;
 }
+
+body {
+  background: url('{{ url_for('static', filename='wood-table.jpg') }}') no-repeat center center fixed;
+  background-size: cover;
+}
+.deck {
+  max-width: 20rem;
+  font-family: 'Arimo', sans-serif;
+  background-color: white;
+  margin: 0 auto;
+}
+.card {
+  padding: 3rem 1rem;
+}
+
+.card img {
+  width: 14rem;
+  display: block;
+}
+.card p {
+  text-align: center;
+}
+.name {
+  font-weight: 700;
+  font-size: 1.7rem;
+}
+
+.information {
+  font-size: 1.3rem;
+  height: 3rem;
+}
+
+.title, .constituency {
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.container {
+  width: 14rem;
+  margin: 0 auto;
+  height: 17rem;
+  overflow-y: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.buttons {
+  display: flex;
+
+}
+.buttons a {
+  flex: 1;
+  font-size: 2rem;
+  text-decoration: none;
+  padding: 1rem;
+  text-align: center;
+  background-color: rgb(105, 142, 158);
+  color: rgb(30, 65, 129);
+}
+
+.buttons a + a {
+  background-color: rgb(208, 35, 52);
+  color: rgb(111, 13, 15);
+}
 </style>
 
-<h1>Learn your Representatives!</h1>
+<div class="deck">
+  {% for politician in politicians %}
+  <div class="card unreviewed">
+    <div class="container"><img src="{{ politician.photo_url }}"></div>
+    <p class="name">{{ politician.name }}, {{ politician.party }}</p>
+    <p class="information"><span class="title">{{ politician.title }}</span> for <span class="constituency">{{ politician.constituency }}</span></p>
+  </div>
+  {% endfor %}
 
-{% for politician in politicians %}
-<div class="card unreviewed">
-<img src="{{ politician.photo_url }}">
-<br>
-{{ politician.name }}, {{ politician.party }}<br>
-{{ politician.title }} for {{ politician.constituency }}<br>
-
+  <div id="done">Congrats, you're done studying! <a href="/">Home</a></div>
+  <div class="buttons">
+    <a href="#" id="back">Back</a>
+    <a href="#" id="next">Next</a>
+  </div>
 </div>
 
-{% endfor %}
 
-<div id="done">Congrats, you're done studying! <a href="/">Home</a></div>
-
-
-
-<input type="button" id="back" value="Back">
-<input type="button" id="next" value="Next">
 
 
 
