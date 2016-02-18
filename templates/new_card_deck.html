@@ -2,9 +2,10 @@
 {% block content %}
 
 <h1>Learn People!</h1>
-{{ mode }}
 
 <form action="/card_decks" method="post">
+    <input type="hidden" name="scored" value="{{ scored }}">
+
     {%for field in fields %}
 
       <input type="submit" name="field" value="{{ field }}">

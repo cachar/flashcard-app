@@ -2,25 +2,16 @@
 {% block content %}
 
 
-{% if mode == "Quiz" %}
-<img src="{{ card.politician.photo_url }}">
-
-<form action="/cards/{{card.id}}" method="post">
-  {% for answer in card.possible_answers() %}
-    <input type="submit" name="answer" value="{{ answer }}">
-  {% endfor %}
-</form>
-{% elif mode == "Flashcard" %}
 
 <div id="flashcard">
     <img id="flashcard-picture" src="{{ card.politician.photo_url }}">
     <input type="button" id="flashcard-text" value="{{ card.right_answer() }}">
 </div>
-    <form action="/cards/{{card.id}}" method="post">
-        <input type="hidden" name="answer" value="flashcard">
-        <input type="submit" value="Next">
-    </form>
-{% endif %}
+<form action="/cards/{{card.id}}" method="post">
+    <input type="hidden" name="answer" value="{{ card.right_answer() }}">
+    <input type="submit" value="Next">
+</form>
+
 
 
 

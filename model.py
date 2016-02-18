@@ -2,6 +2,7 @@
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import validates
+from random import shuffle
 
 db = SQLAlchemy()
 
@@ -51,6 +52,7 @@ class CardDeck(db.Model):
 
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     field = db.Column(db.String(50), nullable=False)
+    scored = db.Column(db.Boolean, nullable=False)
 
     @validates('field')
     def validate_field(self, key, field):
@@ -94,21 +96,28 @@ class PoliticianCard(db.Model):
     def right_answer(self):
         return self.politician.value(self.field)
 
-    def possible_answers(self):
-        right_answer = self.politician.value(self.field)
-        wrong_answers = [p.value(self.field) for p in Politician.query.all()]
-        wrong_answers = list(set(wrong_answers))
-        wrong_answers.remove(right_answer)
-        if wrong_answers == []:
+    def wrong_answers(self):
+        answers = [p.value(self.field) for p in Politician.query.all()]
+        answers = list(set(answers))
+        if answers == []:
             if self.field == "party":
                 if right_answer == "D":
-                    wrong_answers = ["R"]
+                    answers = ["R"]
                 else:
-                    wrong_answers = ["D"]
-        return [right_answer] + wrong_answers[0:3]
+                    answers = ["D"]
+        return answers
+
+    def possible_answers(self):
+        right_answer = self.right_answer()
+        wrong_answers = self.wrong_answers()
+        wrong_answers.remove(right_answer)
+        shuffle(wrong_answers)
+        all_answers = [right_answer] + wrong_answers[0:3]
+        shuffle(all_answers)
+        return all_answers
 
     def correct(self):
-        return self.answer == self.politician.value(self.field)
+        return self.answer == self.right_answer()
 
     def __repr__(self):
         """Provide helpful representation when printed."""

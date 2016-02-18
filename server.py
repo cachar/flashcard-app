@@ -1,6 +1,8 @@
-from flask import Flask, render_template, redirect, request, session, flash, jsonify
+from flask import Flask, render_template, redirect, request, flash
 from model import *
+from  sqlalchemy.sql.expression import func
 from flask_debugtoolbar import DebugToolbarExtension
+from random import shuffle
 
 from jinja2 import StrictUndefined
 
@@ -16,20 +18,24 @@ def landing_page():
     return render_template("homepage.html")
 
 
-@app.route('/card_decks/new', methods=["GET"])
-def new_card_deck():
-    mode = request.args.get("mode")
-    session["mode"] = mode
+@app.route('/flashcards/new', methods=["GET"])
+def new_flashcards():
     fields = Politician.questionable_fields()
-    return render_template("new_card_deck.html", fields=fields, mode=mode)
+    return render_template("new_card_deck.html", fields=fields, scored=False)
+
+@app.route('/quizzes/new', methods=["GET"])
+def new_quiz():
+    fields = Politician.questionable_fields()
+    return render_template("new_card_deck.html", fields=fields, scored=True)
 
 @app.route('/card_decks', methods=["POST"])
 def create_card_deck():
     field = request.form.get("field")
-    card_deck = CardDeck(field=field)
+    scored = request.form.get("scored") == "True"
+    card_deck = CardDeck(field=field, scored=scored)
 
     politicians = Politician.query.all()
-
+    shuffle(politicians)
     for politician in politicians:
         card = PoliticianCard(card_deck=card_deck, politician=politician, field=field)
 
@@ -42,12 +48,12 @@ def create_card_deck():
 
 @app.route('/card_decks/<int:id>', methods=["GET"])
 def show_card_deck(id):
-
+    card_deck = CardDeck.query.get(id)
     card = PoliticianCard.query.filter_by(card_deck_id=id, answer=None).first()
     if card == None:
-        if session["mode"] == "Quiz":
+        if card_deck.scored:
             return redirect("/card_decks/%s/score" % id)
-        elif session["mode"] == "Flashcard":
+        else:
             flash("End of flashcards!")
             return redirect('/')
     else:
@@ -59,10 +65,10 @@ def show_card_deck(id):
 def show_card(id):
 
     card = PoliticianCard.query.get(id)
-    mode = session["mode"]
-
-    return render_template("card_details.html", card=card, mode=mode)
-
+    if card.card_deck.scored:
+        return render_template("quiz.html", card=card)
+    else:
+        return render_template("flashcard.html", card=card)
 
 
 @app.route('/cards/<int:id>', methods=["POST"])
@@ -89,24 +95,7 @@ def show_score(id):
 @app.route('/notes', methods=["GET"])
 def show_notes():
     politicians = Politician.query.all()
-    pol_info = []
-    for politician in politicians:
-        politician.id = {
-            'name' : politician.name,
-            'title' : politician.title,
-            'constituency' : politician.constituency,
-            'party' : politician.party,
-            'photo_url' : politician.photo_url
-        }
-        pol_info.append(politician.id)
-
-    notes = {"info": pol_info}
-    notes = jsonify(notes)
-
-
-
-
-    return render_template("notes.html", notes=notes, politicians=politicians)
+    return render_template("notes.html", politicians=politicians)
 
 
 
