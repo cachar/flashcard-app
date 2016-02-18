@@ -132,7 +132,7 @@ def hard_code_pres_and_vp():
                             title="President",
                             constituency="USA",
                             party="D",
-                            photo_url="http://advocacyrelay.convio.net/images/advocacy/legislators/194235.jpg")
+                            photo_url="http://a5.files.biography.com/image/upload/c_fill,cs_srgb,dpr_1.0,g_face,h_300,q_80,w_300/MTE4MDAzNDEwNzg5ODI4MTEw.jpg")
     db.session.add(politician)
 
     politician = Politician(bioguide_id="VPforP44",
@@ -140,7 +140,7 @@ def hard_code_pres_and_vp():
                             title="Vice President",
                             constituency="USA",
                             party="D",
-                            photo_url="http://advocacyrelay.convio.net/images/advocacy/legislators/165208.jpg")
+                            photo_url="https://upload.wikimedia.org/wikipedia/commons/e/ea/Official_portrait_of_Vice_President_Joe_Biden.jpg")
     db.session.add(politician)
 
     db.session.commit()
