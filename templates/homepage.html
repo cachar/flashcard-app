@@ -1,21 +1,29 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Learn Your Representatives!</h1>
+<style type="text/css">
 
-<p>
-    <form action="/notes" method="get">
+
+
+
+
+</style>
+
+<h1><i class="fa fa-university"></i></h1>
+<h2>Learn Your Representatives</h2>
+
+<div class="menu">
+    <form class="item" action="/notes" method="get">
         <input type="submit" value="Notes">
     </form>
-<p>
-    <form action="/flashcards/new" method="get">
+
+    <form class="item" action="/flashcards/new" method="get">
         <input type="submit" value="Flashcard">
     </form>
-</p>
-<p>
-    <form action="/quizzes/new">
+
+    <form class="item" action="/quizzes/new">
         <input type="submit" value="Quiz">
     </form>
-</p>
+</div>
 
 {% endblock %}

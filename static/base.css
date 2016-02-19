@@ -1,0 +1,131 @@
+.reviewed,
+.unreviewed + .unreviewed,
+.unreviewed + #done {
+  display: none;
+}
+.unreviewed {
+  display: block;
+}
+
+body {
+background-color: #668284;
+background-color: rgb(188, 200, 207);
+background-image: url("http://www.transparenttextures.com/patterns/natural-paper.png");
+/* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+}
+.deck {
+  max-width: 20rem;
+  font-family: 'Arimo', sans-serif;
+  background-color: #F3EFE8;
+  background-image: url("http://www.transparenttextures.com/patterns/paper-2.png");
+  margin: 0 auto;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+.card {
+  padding: 2rem 1rem 0rem 1rem;
+}
+
+.card img {
+  width: 14rem;
+  display: block;
+}
+.card p {
+  text-align: center;
+}
+.name {
+  font-weight: 700;
+  font-size: 1.7rem;
+}
+
+.information {
+  font-size: 1.3rem;
+  height: 3rem;
+}
+
+.title, .constituency {
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.container {
+  width: 14rem;
+  margin: 0 auto;
+  height: 17rem;
+  overflow-y: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.buttons {
+  display: flex;
+
+}
+.buttons a {
+  flex: 1;
+  font-size: 2rem;
+  text-decoration: none;
+  padding: 1rem;
+  text-align: center;
+  background-color: #C95152;
+  color: #772322;
+}
+
+.buttons a + a {
+  background-color: #66A8CB;
+  color: #2B5069;
+}
+.buttons input {
+  flex: 1;
+  border-radius: 0;
+  -webkit-appearance: none;
+  border: 0 none;
+  font-size: 2rem;
+  font-family: 'Arimo', sans-serif;
+  background-color: #66A8CB;
+  color: #2B5069;
+}
+.menu input {
+  background: transparent;
+  border: 0.125rem solid white;
+  color: white;
+  text-transform: uppercase;
+  padding: 0.5rem 1.5rem;
+  font-family: Lato;
+  font-weight: 700;
+  letter-spacing: 0.1rem;
+  font-size: 2rem;
+  width: 90%;
+  border-radius: 0;
+  -webkit-appearance: none;
+}
+.menu input:hover,
+.menu input:focus {
+  background: rgba(50,50,50,0.5);
+  cursor: pointer;
+}
+.menu {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.menu .item {
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+h1, h2 {
+  text-transform: uppercase;
+  color: white;
+  text-align: center;
+}
+h2 {
+  font-family: Lato;
+  letter-spacing: 0.1rem;
+  font-size: 2rem;
+}
+h1 {
+  font-size: 4rem;
+}
+

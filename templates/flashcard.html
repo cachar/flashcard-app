@@ -2,16 +2,17 @@
 {% block content %}
 
 
-
-<div id="flashcard">
-    <img id="flashcard-picture" src="{{ card.politician.photo_url }}">
+<div class="deck">
+<div id="flashcard" class="card">
+    <div class="container"><img id="flashcard-picture" src="{{ card.politician.photo_url }}"></div>
     <input type="button" id="flashcard-text" value="{{ card.right_answer() }}">
 </div>
-<form action="/cards/{{card.id}}" method="post">
+
+<form class="buttons" action="/cards/{{card.id}}" method="post">
     <input type="hidden" name="answer" value="{{ card.right_answer() }}">
     <input type="submit" value="Next">
 </form>
-
+</div>
 
 
 

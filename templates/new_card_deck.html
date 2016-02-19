@@ -1,14 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
+<h1><i class="fa fa-university"></i></h1>
+<h2>Pick your topic</h2>
 
-<h1>Learn People!</h1>
-
-<form action="/card_decks" method="post">
+<div class="menu">
+  <form action="/card_decks" method="post">
     <input type="hidden" name="scored" value="{{ scored }}">
 
     {%for field in fields %}
-
+      <div class="item">
       <input type="submit" name="field" value="{{ field }}">
+      </div>
     {% endfor %}
-</form>
+  </form>
+</div>
 {% endblock %}

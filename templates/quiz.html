@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class="deck">
+<div class="card">
+<div class="container"><img src="{{ card.politician.photo_url }}"></div>
+</div>
 
-<img src="{{ card.politician.photo_url }}">
-
-<form action="/cards/{{card.id}}" method="post">
+<form class="buttons" action="/cards/{{card.id}}" method="post">
   {% for answer in card.possible_answers() %}
     <input type="submit" name="answer" value="{{ answer }}">
   {% endfor %}
 </form>
-
+</div>
 {% endblock %}
