@@ -9,14 +9,11 @@ from server import app
 import requests
 import os
 
-#SUNLIGHT_API_KEY = "19a86558186a4bf8857e67e56f6c9f88"
+
 SUNLIGHT_API_KEY = os.environ['SUNLIGHT_API_KEY']
 HACKBRIGHT_LATITUDE = "37.788666"
 HACKBRIGHT_LONGITUDE = "-122.411462"
 
-#class sunlight.services.congress.Congress(use_https=True)
-#    Congress.locate_legislators_by_lat_lon(HACKBRIGHT_LATITUDE, HACKBRIGHT_LONGITUDE, **kwargs)
-#    pass
 
 
 
@@ -90,6 +87,13 @@ def get_state_reps(HACKBRIGHT_LATITUDE=HACKBRIGHT_LATITUDE,
     url = "http://openstates.org/api/v1//legislators/geo/?lat=%s&long=%s&apikey=%s" % (HACKBRIGHT_LATITUDE,
                                                                                        HACKBRIGHT_LONGITUDE,
                                                                                        SUNLIGHT_API_KEY)
+    alt_pic = {}
+    for row in open("static/photos.txt"):
+        row = row.rstrip()
+        alt_bioguide_id, alt_photo_url = row.split(" ")
+        alt_pic[alt_bioguide_id] = alt_photo_url
+    print alt_pic
+
 
     r = requests.get(url, params=payload)
     jdict = r.json()
@@ -99,8 +103,8 @@ def get_state_reps(HACKBRIGHT_LATITUDE=HACKBRIGHT_LATITUDE,
         bioguide_id = result["leg_id"]
         party = result["party"][0]
         photo_url = result["photo_url"]
-        if name == "Mark Leno":
-            photo_url = "https://upload.wikimedia.org/wikipedia/commons/4/4f/Mark_Leno.jpg"
+        if bioguide_id in alt_pic:
+            photo_url = alt_pic[bioguide_id]
 
         if result["chamber"] == "lower":
             title = "Assemblymember"

@@ -1,16 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<style type="text/css">
-
-
-
-
-
-</style>
 
 <h1><i class="fa fa-university"></i></h1>
 <h2>Learn Your Representatives</h2>
+<div id="demo"></div>
+
 
 <div class="menu">
     <form class="item" action="/notes" method="get">
@@ -25,5 +20,41 @@
         <input type="submit" value="Quiz">
     </form>
 </div>
+
+
+
+<script type="text/javascript">
+// Get the current location
+var x = document.getElementById("demo");
+
+
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPos);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+function showPos(position) {
+    x.innerHTML = "Latitude: " + position.coords.latitude + 
+    "<br>Longitude: " + position.coords.longitude; 
+}
+
+window.onload=function(){
+    if(navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    }
+    else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+
+function showPosition(pos){
+    alert("Latitude: "+pos.coords.latitude+"nLongitude: "+pos.coords.longitude);
+}
+
+</script>
+
 
 {% endblock %}
