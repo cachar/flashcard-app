@@ -37,22 +37,10 @@ function getLocation() {
     }
 }
 function showPos(position) {
-    x.innerHTML = "Latitude: " + position.coords.latitude + 
-    "<br>Longitude: " + position.coords.longitude; 
+    x.innerHTML = "Latitude: " + position.coords.latitude +
+    "<br>Longitude: " + position.coords.longitude;
 }
-
-window.onload=function(){
-    if(navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
-    }
-    else {
-        alert("Geolocation is not supported by this browser.");
-    }
-}
-
-function showPosition(pos){
-    alert("Latitude: "+pos.coords.latitude+"nLongitude: "+pos.coords.longitude);
-}
+getLocation();
 
 </script>
 
