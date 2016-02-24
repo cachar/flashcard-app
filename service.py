@@ -11,21 +11,21 @@ class SunlightClient(object):
     def __init__(self):
         self.key = os.environ['SUNLIGHT_API_KEY']
 
-    def fetch_congress(self, lat, long):
+    def fetch_congress(self, latitude, longitude):
         url = "http://congress.api.sunlightfoundation.com/legislators/locate"
-        payload = {"latitude": lat,
-                    "longitude": long,
+        payload = {"latitude": latitude,
+                    "longitude": longitude,
                     "apikey": self.key}
 
         r = requests.get(url, params=payload)
         results = r.json()['results']
         return [CongressPresenter(result) for result in results]
 
-    def fetch_state_ppl(self, lat, long):
+    def fetch_state_ppl(self, latitude, longitude):
         url = "http://openstates.org/api/v1//legislators/geo/"
 
-        payload = {"lat": lat,
-                   "long": long,
+        payload = {"lat": latitude,
+                   "long": longitude,
                    "apikey": self.key}
 
         r = requests.get(url, params=payload)
@@ -80,7 +80,7 @@ class StatePresenter(object):
         return self.result['full_name']
 
     def title(self):
-        if self.result["chamber"] == "lower":
+        if self.result["chamber"] == "lower" and self.result["state"] == "ca":
             return "Assemblymember"
         elif self.result["chamber"] == "upper":
             return "Senator"
@@ -103,7 +103,7 @@ class StatePresenter(object):
 class ExecutivePresenter(object):
 
     @classmethod
-    def fetch(cls, lat, long):
+    def fetch(cls, latitude, longitude):
         return [cls.president(), cls.vice_president()]
 
     @classmethod
@@ -158,8 +158,8 @@ class PoliticianImporter(object):
 
 
 
-    def add_or_update(self, lat, long):
-        people = self.fetch(lat, long)
+    def add_or_update(self, latitude, longitude):
+        people = self.fetch(latitude, longitude)
         for person in people:
             politician = Politician.query.filter(Politician.bioguide_id == person.bioguide_id()).first()
             if politician == None:
