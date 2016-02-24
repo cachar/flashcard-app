@@ -180,6 +180,8 @@ class PoliticianImporter(object):
                 politician.photo_url = self.alt_pic.get(person.bioguide_id(), person.photo_url())
 
         db.session.commit()
+        bioguide_ids = [person.bioguide_id() for person in people]
+        return Politician.query.filter(Politician.bioguide_id.in_(bioguide_ids)).all()
 
     @classmethod
     def find_alt_pics(cls):

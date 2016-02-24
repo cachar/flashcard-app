@@ -6,6 +6,8 @@
 <div class="menu">
   <form action="/card_decks" method="post">
     <input type="hidden" name="scored" value="{{ scored }}">
+    <input id="latitude" type="hidden" name="latitude" value="{{ latitude }}">
+    <input id="longitude" type="hidden" name="longitude" value="{{ longitude }}">
 
     {%for field in fields %}
       <div class="item">
@@ -14,4 +16,23 @@
     {% endfor %}
   </form>
 </div>
+
+
+<script type="text/javascript">
+// Get the current location
+
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPos);
+    }
+}
+function showPos(position) {
+    document.getElementById("latitude").value = position.coords.latitude;
+    document.getElementById("longitude").value = position.coords.longitude;
+}
+getLocation();
+
+</script>
+
 {% endblock %}

@@ -3,12 +3,11 @@
 
 
 from model import connect_to_db, db
-from server import app
+from server import app, HACKBRIGHT_LATITUDE, HACKBRIGHT_LONGITUDE
 from service import SunlightClient, PoliticianImporter, ExecutivePresenter
 
 
-HACKBRIGHT_LATITUDE = "37.788666"
-HACKBRIGHT_LONGITUDE = "-122.411462"
+
 
 
 

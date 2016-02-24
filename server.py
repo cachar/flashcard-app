@@ -6,7 +6,18 @@ from random import shuffle
 
 from jinja2 import StrictUndefined
 
+from service import SunlightClient, PoliticianImporter, ExecutivePresenter
+
 app = Flask(__name__)
+
+
+HACKBRIGHT_LATITUDE = "37.788666"
+HACKBRIGHT_LONGITUDE = "-122.411462"
+
+client = SunlightClient()
+congress_importer = PoliticianImporter(client.fetch_congress)
+state_importer = PoliticianImporter(client.fetch_state_ppl)
+executive_importer = PoliticianImporter(ExecutivePresenter.fetch)
 
 # Required to use Flask sessions and the debug toolbar
 app.secret_key = "ABC"
@@ -21,20 +32,35 @@ def landing_page():
 @app.route('/flashcards/new', methods=["GET"])
 def new_flashcards():
     fields = Politician.questionable_fields()
-    return render_template("new_card_deck.html", fields=fields, scored=False)
+    return render_template("new_card_deck.html",
+                           fields=fields,
+                           scored=False,
+                           latitude=HACKBRIGHT_LATITUDE,
+                           longitude=HACKBRIGHT_LONGITUDE)
 
 @app.route('/quizzes/new', methods=["GET"])
 def new_quiz():
     fields = Politician.questionable_fields()
-    return render_template("new_card_deck.html", fields=fields, scored=True)
+    return render_template("new_card_deck.html",
+                           fields=fields,
+                           scored=True,
+                           latitude=HACKBRIGHT_LATITUDE,
+                           longitude=HACKBRIGHT_LONGITUDE)
 
 @app.route('/card_decks', methods=["POST"])
 def create_card_deck():
     field = request.form.get("field")
     scored = request.form.get("scored") == "True"
+    latitude = request.form.get("latitude")
+    longitude = request.form.get("longitude")
+
+    congressional_politicians = congress_importer.add_or_update(latitude, longitude)
+    state_politicians = state_importer.add_or_update(latitude, longitude)
+    executive_politicians = executive_importer.add_or_update(latitude, longitude)
+
     card_deck = CardDeck(field=field, scored=scored)
 
-    politicians = Politician.query.all()
+    politicians = congressional_politicians + state_politicians + executive_politicians
     shuffle(politicians)
     for politician in politicians:
         card = PoliticianCard(card_deck=card_deck, politician=politician, field=field)
