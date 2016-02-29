@@ -61,6 +61,14 @@ background-image: url("http://www.transparenttextures.com/patterns/natural-paper
   display: flex;
 
 }
+
+.buttons.answers input {
+  flex-wrap: wrap;
+  flex: 1 100%;
+  flex-direction: column;
+
+}
+
 .buttons a {
   flex: 1;
   font-size: 2rem;

@@ -26,11 +26,15 @@ app.jinja_env.undefined = StrictUndefined
 
 @app.route('/')
 def landing_page():
+    """Show landing page."""
+
     return render_template("homepage.html")
 
 
 @app.route('/flashcards/new', methods=["GET"])
 def new_flashcards():
+    """Show user a menu of possible fields to review in flashcard format."""
+
     fields = Politician.questionable_fields()
     return render_template("new_card_deck.html",
                            fields=fields,
@@ -54,13 +58,17 @@ def create_card_deck():
     latitude = request.form.get("latitude")
     longitude = request.form.get("longitude")
 
-    congressional_politicians = congress_importer.add_or_update(latitude, longitude)
-    state_politicians = state_importer.add_or_update(latitude, longitude)
-    executive_politicians = executive_importer.add_or_update(latitude, longitude)
-
     card_deck = CardDeck(field=field, scored=scored)
+    try:
+        congressional_politicians = congress_importer.add_or_update(latitude, longitude)
+        state_politicians = state_importer.add_or_update(latitude, longitude)
+        executive_politicians = executive_importer.add_or_update(latitude, longitude)
 
-    politicians = congressional_politicians + state_politicians + executive_politicians
+        politicians = congressional_politicians + state_politicians + executive_politicians
+    except ValueError:
+        politicians = Politician.query.all()
+
+
     shuffle(politicians)
     for politician in politicians:
         card = PoliticianCard(card_deck=card_deck, politician=politician, field=field)
@@ -121,6 +129,8 @@ def show_score(id):
 @app.route('/notes', methods=["GET"])
 def show_notes():
     politicians = Politician.query.all()
+
+
     return render_template("notes.html", politicians=politicians)
 
 

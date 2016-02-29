@@ -4,8 +4,9 @@
 
 <div class="deck">
 <div id="flashcard" class="card">
-    <div class="container"><img id="flashcard-picture" src="{{ card.politician.photo_url }}"></div>
-    <input type="button" id="flashcard-text" value="{{ card.right_answer() }}">
+    <div class="container"><img id="flashcard-picture" src="{{ card.politician.photo_url }}">
+        <div id="flashcard-text">{{ card.right_answer() }}</div>
+    </div>
 </div>
 
 <form class="buttons" action="/cards/{{card.id}}" method="post">
@@ -21,16 +22,47 @@
 "use strict";
 
 var flashcard = $('#flashcard');
+
 var picture = $('#flashcard-picture');
 var info = $('#flashcard-text');
+
 info.hide();
 
-flashcard.click(function() {
+function toggle() {
     picture.toggle();
     info.toggle();
-    }
-);
+}
 
+flashcard.click(toggle);
+
+</script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.3.4/jasmine.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.3.4/jasmine-html.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.3.4/boot.js"></script>
+
+
+
+<script type="text/javascript">
+describe("My Flashcard Test Suite", function () {
+    it("should not show a picture if there is text", function () {
+        toggle();
+        if (info.is(':visible')) {
+            expect(picture.is(':visible')).toBeFalsy();
+        }
+
+
+    });
+
+    it("should not show text if there is a picture", function () {
+        toggle();
+        if (info.is(':hidden')) {
+            expect(picture.is(':visible')).toBeTruthy();
+        }
+    });
+});
 
 </script>
 {% endblock %}
