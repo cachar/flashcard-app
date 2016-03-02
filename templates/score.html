@@ -5,13 +5,29 @@
 
 You got {{ card_deck.score() }} out of {{ card_deck.card_count() }} right.
 <p></p>
+<div style="display: none" id="is_new_high_score">{{ is_new_high_score }}</div>
 <form action="/high_scores">
-    <input type="text" name="user" value="Name">
+    <input id="username" type="text" name="user" placeholder="Name" style="visibility: hidden">
+    <input type="hidden" name="score_grade" value="{{ score_grade }}">
+    <br>
 </form>
 
 <a href="/high_scores">High Scores</a>
 <p></p>
 <a href="/">Home</a>
+
+
+<script type="text/javascript">
+"use strict";
+
+var NewHighScore = document.getElementById("is_new_high_score").innerHTML;
+
+if (NewHighScore === "True") {
+    document.getElementById("username").style.visibility="visible";
+}
+
+
+</script>
 
 
 {% endblock %}

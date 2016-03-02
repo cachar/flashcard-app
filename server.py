@@ -136,7 +136,7 @@ def show_score(id):
     score_grade = float(score) / card_count * 100
     score_grade = float("{0:.2f}".format(score_grade))
 
-    new_high_score = False
+    is_new_high_score = False
 
     top_five_score_objects = HighScore.top_five_scores()
 
@@ -144,18 +144,15 @@ def show_score(id):
         if score_grade > score_object.score:
 
             flash("New high score!")
-            new_high_score = True
+            is_new_high_score = True
 
-            high_score = HighScore(score=score_grade,
-                                   timestamp=datetime.now(),
-                                   name="Balloonicorn")
-            db.session.add(high_score)
-            db.session.commit()
+
             break
 
     return render_template("score.html",
                            card_deck=card_deck, 
-                           new_high_score=new_high_score)
+                           is_new_high_score=is_new_high_score,
+                           score_grade=score_grade)
 
 
 
@@ -175,6 +172,15 @@ def show_notes():
 @app.route('/high_scores', methods=["GET"])
 def show_high_scores():
     """Display top 5 high scores"""
+
+    user = request.args.get("user")
+    score_grade = request.args.get("score_grade")
+    if user != "":
+        high_score = HighScore(score=score_grade,
+                           timestamp=datetime.now(),
+                           name=user)
+        db.session.add(high_score)
+        db.session.commit()
 
     high_scores = HighScore.top_five_scores()
    
