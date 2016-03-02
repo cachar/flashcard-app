@@ -1,9 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Score!</h1>
+<h1>Score</h1>
 
-Score is {{ card_deck.score() }} out of {{ card_deck.card_count() }}
+You got {{ card_deck.score() }} out of {{ card_deck.card_count() }} right.
+<p></p>
+<form action="/high_scores">
+    <input type="text" name="user" value="Name">
+</form>
+
+<a href="/high_scores">High Scores</a>
 <p></p>
 <a href="/">Home</a>
 

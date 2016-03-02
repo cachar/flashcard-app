@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>High Scores</h1>
+
+<ol>
+{% for high_score in high_scores %}
+    <li>{{ high_score.name }} {{ high_score.score }} {{ high_score.timestamp.month }}-{{ high_score.timestamp.day }}-{{ high_score.timestamp.year }}</li>
+{% endfor %}
+</ol>
+
+<p></p>
+<a href="/">Home</a>
+
+
+{% endblock %}

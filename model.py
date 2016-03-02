@@ -3,6 +3,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import validates
 from random import shuffle
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -46,7 +47,7 @@ class Politician(db.Model):
                                                                    self.title)
 
 class CardDeck(db.Model):
-    """Set of questions."""
+    """Collection of politician cards."""
 
     __tablename__ = "card_decks"
 
@@ -77,7 +78,7 @@ class CardDeck(db.Model):
 
 
 class PoliticianCard(db.Model):
-    """Question with a politician and a field."""
+    """Card with a politician and a field."""
 
     __tablename__ = "politician_cards"
 
@@ -99,12 +100,12 @@ class PoliticianCard(db.Model):
     def wrong_answers(self):
         answers = [p.value(self.field) for p in Politician.query.all()]
         answers = list(set(answers))
-        if answers == []:
-            if self.field == "party":
-                if right_answer == "D":
-                    answers = ["R"]
-                else:
-                    answers = ["D"]
+
+        if self.field == "party":
+            if self.right_answer() == "D":
+                answers += ["R"]
+            else:
+                answers += ["D"]
         return answers
 
     def possible_answers(self):
@@ -123,11 +124,30 @@ class PoliticianCard(db.Model):
         """Provide helpful representation when printed."""
 
         return "<PoliticianCard id=%s politician_id=%s field=%s>" % (self.id,
-                                                                         self.politician_id,
-                                                                         self.card_deck.field)
+                                                                     self.politician_id,
+                                                                     self.card_deck.field)
 
 
+class HighScore(db.Model):
+    """Collection of card deck scores."""
 
+    ___tablename___ = "high_scores"
+
+    id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    score = db.Column(db.Float, nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False)
+    name = db.Column(db.String(50), nullable=False)
+
+    @classmethod
+    def top_five_scores(cls):
+        return cls.query.order_by(HighScore.score.desc()).limit(5).all()
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<HighScore id=%s score=%s timestamp=%s" % (self.id,
+                                                           self.score,
+                                                           self.timestamp)
 
 
 def connect_to_db(app):

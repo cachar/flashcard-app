@@ -7,11 +7,16 @@ from model import Politician, db
 
 
 class SunlightClient(object):
+    """Create a class to handle fetching data from Sunlight Foundation APIs"""
 
     def __init__(self):
         self.key = os.environ['SUNLIGHT_API_KEY']
 
     def fetch_congress(self, latitude, longitude):
+        """Fetch data from the Congress API, use CongressPresenter to turn
+        JSON into a list of politician-like objects for easy adding/updating of
+        database."""
+
         url = "http://congress.api.sunlightfoundation.com/legislators/locate"
         payload = {"latitude": latitude,
                     "longitude": longitude,
@@ -22,6 +27,10 @@ class SunlightClient(object):
         return [CongressPresenter(result) for result in results]
 
     def fetch_state_ppl(self, latitude, longitude):
+        """Fetch data from the Open States API, use StatePresenter to turn
+        JSON into a list of politician-like objects for easy adding/updating of
+        database."""
+
         url = "http://openstates.org/api/v1//legislators/geo/"
 
         payload = {"lat": latitude,
@@ -34,6 +43,8 @@ class SunlightClient(object):
 
 
 class CongressPresenter(object):
+    """Turn JSON from Congress API into a Politician-like object."""
+
 
     def __init__(self, result):
         self.result = result
@@ -67,7 +78,7 @@ class CongressPresenter(object):
 
 
 class StatePresenter(object):
-
+    """Turn JSON from Open States API into a Politician-like object."""
 
 
     def __init__(self, result):
@@ -101,6 +112,8 @@ class StatePresenter(object):
 
 
 class ExecutivePresenter(object):
+    """Hard code in president and vice president as Politician-like objects,
+    but use syntax similar to CongressPresenter and StatePresenter."""
 
     @classmethod
     def fetch(cls, latitude, longitude):
@@ -150,6 +163,8 @@ class ExecutivePresenter(object):
 
 
 class PoliticianImporter(object):
+    """Fetch data from API, then add or update local database."""
+
 
     def __init__(self, fetch):
 
@@ -164,13 +179,13 @@ class PoliticianImporter(object):
             politician = Politician.query.filter(Politician.bioguide_id == person.bioguide_id()).first()
             if politician == None:
                 politician = Politician(
-                    bioguide_id= person.bioguide_id(),
-                    name= person.name(),
-                    title= person.title(),
-                    constituency= person.constituency(),
-                    party= person.party(),
-                    photo_url= self.alt_pic.get(person.bioguide_id(), person.photo_url()),
-                )
+                             bioguide_id= person.bioguide_id(),
+                             name= person.name(),
+                             title= person.title(),
+                             constituency= person.constituency(),
+                             party= person.party(),
+                             photo_url= self.alt_pic.get(person.bioguide_id(), person.photo_url()),
+                             )
                 db.session.add(politician)
             else:
                 politician.name = person.name()

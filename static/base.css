@@ -66,6 +66,8 @@ background-image: url("http://www.transparenttextures.com/patterns/natural-paper
   flex-wrap: wrap;
   flex: 1 100%;
   flex-direction: column;
+  justify-content: flex-end;
+  text-align: center;
 
 }
 
