@@ -119,6 +119,7 @@ class ExecutivePresenter(object):
     def fetch(cls, latitude, longitude):
         return [cls.president(), cls.vice_president()]
 
+    # return an ExecutivePresenter object with details for president
     @classmethod
     def president(cls):
         return ExecutivePresenter(bioguide_id="POTUS44",

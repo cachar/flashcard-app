@@ -1,13 +1,19 @@
-import server
+from server import app
+from model import *
 import unittest
 
 
-class ServerTests(unittest.TestCase):
+class FlashcardTests(unittest.TestCase):
     """Tests for the server."""
 
     def setUp(self):
-        self.client = server.app.test_client()
-        server.app.config['TESTING'] = True
+        self.client = app.test_client()
+        app.config['TESTING'] = True
+
+        connect_to_db(app, "postgresql:///testdb")
+
+        db.create_all()
+        example_data_high_scores()
 
 
     # Tests to make sure templates are rendered correctly
@@ -17,7 +23,7 @@ class ServerTests(unittest.TestCase):
         result = self.client.get('/')
         
         self.assertEqual(result.status_code, 200)
-        self.assertIn("Learn Your Representatives", result.data)
+        self.assertIn("House of Cards", result.data)
 
     def test_new_flashcards(self):
         
@@ -26,19 +32,32 @@ class ServerTests(unittest.TestCase):
         self.assertEqual(result.status_code, 200)
         self.assertIn("party", result.data)
 
-    # def test_create_card_deck(self):
-    #     result = self.client.post('/card_decks',
-    #                               data={'field': 'name',
-    #                                     'scored': True,
-    #                                     'latitude': '37.788666',
-    #                                     'longitude': '-122.411462'},
-    #                               follow_redirects=True)
+    def test_create_card_deck(self):
+        pass
 
-    #     pass
+        # result = self.client.post('/card_decks',
+        #                           data={'field': 'name',
+        #                                 'scored': True,
+        #                                 'latitude': '37.788666',
+        #                                 'longitude': '-122.411462'},
+        #                           follow_redirects=True)
+
+    def tearDown(self):
+
+        db.session.close()
+        db.drop_all()
+
+    def test_top_five_scores(self):
+
+        top_five = HighScore.top_five_scores()
+
+        self.assertEqual(len(top_five), 5)
+
+        
 
 
-class ServiceTests(unittest.TestCase):
-    pass   
+
+
 
 
 if __name__ == "__main__":

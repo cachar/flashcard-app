@@ -10,7 +10,6 @@ from datetime import datetime
 def load_politicians():
     """Load politicians from Sunlight Foundation API."""
 
-    # Get federal congressional representatives.
     client = SunlightClient()
     PoliticianImporter(client.fetch_congress).add_or_update(HACKBRIGHT_LATITUDE, HACKBRIGHT_LONGITUDE)
     PoliticianImporter(client.fetch_state_ppl).add_or_update(HACKBRIGHT_LATITUDE, HACKBRIGHT_LONGITUDE)

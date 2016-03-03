@@ -150,16 +150,34 @@ class HighScore(db.Model):
                                                            self.timestamp)
 
 
-def connect_to_db(app):
+##############################################################
+
+def example_data_high_scores():
+    """Create some fake politicians for test db"""
+
+    # Delete existing data in case test is run more than once
+    HighScore.query.delete()
+
+    # Add new fake data
+    for i in range(6):
+        new_high_score = HighScore(score=i*10.1,
+                                   timestamp=datetime.now(),
+                                   name="Balloonicorn")
+        db.session.add(new_high_score)
+
+    db.session.commit()
+
+
+def connect_to_db(app, database):
     """Connect the database to our Flask app."""
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///flashcards'
+    app.config['SQLALCHEMY_DATABASE_URI'] = database
     db.app = app
     db.init_app(app)
 
 if __name__ == '__main__':
 
     from server import app
-    connect_to_db(app)
+    connect_to_db(app, 'postgresql:///flashcards')
     print "Connected to DB"
 
