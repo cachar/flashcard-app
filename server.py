@@ -68,7 +68,7 @@ def create_card_deck():
     longitude = request.form.get("longitude")
 
     card_deck = CardDeck(field=field, scored=scored)
-    
+
     politicians = load_politicians(latitude, longitude)
 
 
@@ -150,7 +150,7 @@ def show_score(id):
             break
 
     return render_template("score.html",
-                           card_deck=card_deck, 
+                           card_deck=card_deck,
                            is_new_high_score=is_new_high_score,
                            score_grade=score_grade)
 
@@ -183,7 +183,7 @@ def show_high_scores():
         db.session.commit()
 
     high_scores = HighScore.top_five_scores()
-   
+
     return render_template("high_scores.html", high_scores=high_scores)
 
 
