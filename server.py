@@ -161,10 +161,9 @@ def show_notes():
     """Query API for politicians, then show in notes form. Query local
     database if API is down."""
 
-    latitude = request.args.get("latitude")
-    longitude = request.args.get("longitude")
 
-    politicians = load_politicians(latitude, longitude)
+
+    politicians = Politician.query.all()
 
 
     return render_template("notes.html", politicians=politicians)

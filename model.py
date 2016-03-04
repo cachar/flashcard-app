@@ -101,10 +101,10 @@ class PoliticianCard(db.Model):
         answers = [p.value(self.field) for p in Politician.query.all()]
         answers = list(set(answers))
 
-        if self.field == "party":
+        if self.field == "party" and len(answers) == 1:
             if self.right_answer() == "D":
                 answers += ["R"]
-            else:
+            elif self.right_answer() == "R":
                 answers += ["D"]
         return answers
 
