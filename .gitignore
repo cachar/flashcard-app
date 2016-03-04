@@ -1,3 +1,5 @@
+.DS_Store
 env/
 *.pyc
 secrets.sh
+node_modules/

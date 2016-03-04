@@ -23,11 +23,11 @@ def initialize_high_scores():
                                timestamp=datetime.now(),
                                name="Balloonicorn")
         db.session.add(high_score)
-            
+
     db.session.commit()
 
 if __name__ == "__main__":
-    connect_to_db(app)
+    connect_to_db(app, 'postgresql:///flashcards')
 
     db.create_all()
 
