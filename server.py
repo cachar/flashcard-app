@@ -173,6 +173,12 @@ def show_high_scores():
     """Display top 5 high scores"""
 
     user = request.form.get("user")
+
+    # validate text input is made up of only letters
+    # special characters could be an attempt at SQL injection
+    assert user.isalpha()
+
+
     score_grade = request.form.get("score_grade")
     if user != "":
         high_score = HighScore(score=score_grade,
