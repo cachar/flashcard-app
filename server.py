@@ -1,13 +1,13 @@
-from flask import Flask, render_template, redirect, request, flash
+from flask import Flask, render_template, redirect, request, flash, jsonify
 from model import *
 from  sqlalchemy.sql.expression import func
 from flask_debugtoolbar import DebugToolbarExtension
 from random import shuffle
 from datetime import datetime
 from sqlalchemy import desc
-
 from jinja2 import StrictUndefined
 
+import seed
 from service import SunlightClient, PoliticianImporter, ExecutivePresenter
 
 app = Flask(__name__)
@@ -168,12 +168,12 @@ def show_notes():
 
     return render_template("notes.html", politicians=politicians)
 
-@app.route('/high_scores', methods=["GET"])
+@app.route('/high_scores', methods=["POST"])
 def show_high_scores():
     """Display top 5 high scores"""
 
-    user = request.args.get("user")
-    score_grade = request.args.get("score_grade")
+    user = request.form.get("user")
+    score_grade = request.form.get("score_grade")
     if user != "":
         high_score = HighScore(score=score_grade,
                            timestamp=datetime.now(),
@@ -201,6 +201,27 @@ def load_politicians(latitude, longitude):
 
     return politicians
 
+
+@app.route('/high_scores/clear.json', methods=["POST"])
+def clear_high_scores():
+    """Clear high scores"""
+    
+    HighScore.query.delete()
+    seed.initialize_high_scores()
+    db.session.commit()
+
+    high_scores = HighScore.query.all()
+    new_timestamp = datetime.now()
+    new_month = new_timestamp.month
+    new_day = new_timestamp.day
+    new_year = new_timestamp.year
+    new_scores = {'name': "Balloonicorn",
+                  'score': 0.0, 
+                  'month': new_month,
+                  'day': new_day,
+                  'year': new_year}
+
+    return jsonify(new_scores)
 
 
 if __name__ == "__main__":

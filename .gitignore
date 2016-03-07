@@ -3,3 +3,4 @@ env/
 *.pyc
 secrets.sh
 node_modules/
+.coverage

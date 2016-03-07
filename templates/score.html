@@ -6,7 +6,7 @@
 You got {{ card_deck.score() }} out of {{ card_deck.card_count() }} right.
 <p></p>
 <div style="display: none" id="is_new_high_score">{{ is_new_high_score }}</div>
-<form action="/high_scores">
+<form action="/high_scores" method="post">
     <input id="username" type="text" name="user" placeholder="Name" style="visibility: hidden">
     <input type="hidden" name="score_grade" value="{{ score_grade }}">
     <br>

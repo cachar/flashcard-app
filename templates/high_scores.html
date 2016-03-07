@@ -3,14 +3,45 @@
 
 <h1>High Scores</h1>
 
+
 <ol>
 {% for high_score in high_scores %}
-    <li>{{ high_score.name }} {{ high_score.score }} {{ high_score.timestamp.month }}-{{ high_score.timestamp.day }}-{{ high_score.timestamp.year }}</li>
+    <li><span id="name">{{ high_score.name }}</span> 
+        <span id="score">{{ high_score.score }}</span> 
+        <span id="month">{{ high_score.timestamp.month }}</span>-<span id="day">{{ high_score.timestamp.day }}</span>-<span id="year">{{ high_score.timestamp.year }}</span></li>
 {% endfor %}
 </ol>
-
+<p></p>
+<input type="button" id="clear" name="clear" value="Clear High Scores">
 <p></p>
 <a href="/">Home</a>
 
+<script src="{{ url_for('static', filename='jquery-2.2.1.min.js') }}"></script>
+<script type="text/javascript">
+"use strict"
+
+
+function replaceHighScores(results) {
+    var scores = results;
+    console.dir(results);
+    $('#name').html(scores.name);
+    $('#score').html(scores.score);
+    $('#month').html(scores.month);
+    $('#day').html(scores.day);
+    $('#year').html(scores.year);
+
+}
+
+function clearHighScores(evt) {
+    $.post("/high_scores/clear.json", replaceHighScores);
+    console.log("clear high scores button is clicked");
+}
+
+
+$('#clear').on("click", clearHighScores);
+
+
+
+</script>
 
 {% endblock %}
