@@ -32,15 +32,23 @@ class FlashcardTests(unittest.TestCase):
         self.assertEqual(result.status_code, 200)
         self.assertIn("party", result.data)
 
-    def test_create_card_deck(self):
-        pass
+    def test_new_quiz(self):
 
-        # result = self.client.post('/card_decks',
-        #                           data={'field': 'name',
-        #                                 'scored': True,
-        #                                 'latitude': '37.788666',
-        #                                 'longitude': '-122.411462'},
-        #                           follow_redirects=True)
+        result = self.client.get('quizzes/new')
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn("party", result.data)
+
+    def test_create_card_deck(self):
+        
+        result = self.client.post('/card_decks',
+                                  data={'field': 'name',
+                                        'scored': True,
+                                        'latitude': '37.788666',
+                                        'longitude': '-122.411462'},
+                                  follow_redirects=True)
+
+        self.assertEqual(result.status_code, 200)
 
     def tearDown(self):
 

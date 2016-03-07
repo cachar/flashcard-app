@@ -7,7 +7,7 @@ from datetime import datetime
 from sqlalchemy import desc
 from jinja2 import StrictUndefined
 
-import seed
+# import seed circular dependancy...
 from service import SunlightClient, PoliticianImporter, ExecutivePresenter
 
 app = Flask(__name__)
@@ -213,7 +213,7 @@ def clear_high_scores():
     """Clear high scores"""
     
     HighScore.query.delete()
-    seed.initialize_high_scores()
+    initialize_high_scores()
     db.session.commit()
 
     high_scores = HighScore.query.all()
@@ -228,6 +228,18 @@ def clear_high_scores():
                   'year': new_year}
 
     return jsonify(new_scores)
+
+
+def initialize_high_scores():
+    """Initialize 5 high scores."""
+
+    for i in range(5):
+        high_score = HighScore(score=0,
+                               timestamp=datetime.now(),
+                               name="Balloonicorn")
+        db.session.add(high_score)
+
+    db.session.commit()
 
 
 if __name__ == "__main__":
