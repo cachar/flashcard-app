@@ -56,6 +56,40 @@ background-image: url("http://www.transparenttextures.com/patterns/natural-paper
   align-items: center;
   justify-content: center;
 }
+.score-msg {
+  text-align: center;
+}
+
+.score-table {
+  font-family: Lato;
+  flex-direction: column;
+  font-size: 0.95rem;
+  padding: 2rem 1rem 0rem 0rem;
+}
+
+.score-data {
+  flex-direction: column;
+}
+
+.score-form {
+  text-align: center;
+  font-family: Lato;
+}
+.high-score-button {
+
+  background-color: #66A8CB;
+  color: #2B5069;
+
+  text-transform: uppercase;
+  font-size: 1rem;
+}
+
+.name-input {
+  font-size: 1.2rem;
+}
+.score-head {
+  color: #2B5069;
+}
 
 .buttons {
   display: flex;
@@ -94,6 +128,11 @@ background-image: url("http://www.transparenttextures.com/patterns/natural-paper
   background-color: #66A8CB;
   color: #2B5069;
 }
+
+.home-link {
+  padding: 0 0 2rem 0;
+}
+
 .menu input {
   background: transparent;
   border: 0.125rem solid white;
@@ -136,5 +175,9 @@ h2 {
 }
 h1 {
   font-size: 4rem;
+}
+
+.timestamp {
+  justify-content: flex-end;
 }
 

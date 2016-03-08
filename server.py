@@ -176,7 +176,7 @@ def show_high_scores():
 
     # validate text input is made up of only letters
     # special characters could be an attempt at SQL injection
-    assert user.isalpha()
+    assert user.isalpha() or not user
 
 
     score_grade = request.form.get("score_grade")
@@ -221,8 +221,11 @@ def clear_high_scores():
     new_month = new_timestamp.month
     new_day = new_timestamp.day
     new_year = new_timestamp.year
+
+    new_score = "0.00"
+
     new_scores = {'name': "Balloonicorn",
-                  'score': 0.0, 
+                  'score': new_score,
                   'month': new_month,
                   'day': new_day,
                   'year': new_year}

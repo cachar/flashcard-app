@@ -50,16 +50,18 @@ class FlashcardTests(unittest.TestCase):
 
         self.assertEqual(result.status_code, 200)
 
-    def tearDown(self):
-
-        db.session.close()
-        db.drop_all()
-
     def test_top_five_scores(self):
 
         top_five = HighScore.top_five_scores()
 
         self.assertEqual(len(top_five), 5)
+
+    def tearDown(self):
+
+        db.session.close()
+        db.drop_all()
+
+
 
         
 

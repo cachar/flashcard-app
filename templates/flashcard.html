@@ -4,7 +4,11 @@
 
 <div class="deck">
 <div id="flashcard" class="card">
-    <div class="container"><img id="flashcard-picture" src="{{ card.politician.photo_url }}">
+    <div class="container">
+        {% for message in get_flashed_messages() %}
+            {{ message }}
+        {% endfor %}
+        <img id="flashcard-picture" src="{{ card.politician.photo_url }}">
         <p id="flashcard-text" style="display: none">{{ card.right_answer() }}</p>
     </div>
 </div>

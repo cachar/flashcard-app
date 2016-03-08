@@ -1,20 +1,39 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>High Scores</h1>
+<div class="deck">
+    <div class="card">
+
+        <h2 class="score-head">High Scores</h2>
+
+        <div class="container" "score-data">
+            <div class="score-table">
+            <ol>
+                <table>
+                {% for high_score in high_scores %}
+                    <tr>
+                        <td>
+                            <span class="user-name">{{ high_score.name }}</span></td>
+                        <td><span class="score">{{ high_score.score }}</span></td>
+                        <td class="timestamp">
+                            <span class="month">{{ high_score.timestamp.month }}</span>-<span class="day">{{ high_score.timestamp.day }}</span>-<span class="year">{{ high_score.timestamp.year }}</span></td>
+                    
+                    </tr>
+                {% endfor %}
+                </table>
+            </ol>
+            </div>
 
 
-<ol>
-{% for high_score in high_scores %}
-    <li><span id="name">{{ high_score.name }}</span> 
-        <span id="score">{{ high_score.score }}</span> 
-        <span id="month">{{ high_score.timestamp.month }}</span>-<span id="day">{{ high_score.timestamp.day }}</span>-<span id="year">{{ high_score.timestamp.year }}</span></li>
-{% endfor %}
-</ol>
-<p></p>
-<input type="button" id="clear" name="clear" value="Clear High Scores">
-<p></p>
-<a href="/">Home</a>
+
+            <p><input class="high-score-button" type="button" id="clear" name="clear" value="Clear High Scores"></p>
+
+        </div>
+
+        <p class="home-link"><a href="/">Home</a></p>
+
+    </div>
+</div>
 
 <script src="{{ url_for('static', filename='jquery-2.2.1.min.js') }}"></script>
 <script type="text/javascript">
@@ -24,11 +43,11 @@
 function replaceHighScores(results) {
     var scores = results;
     console.dir(results);
-    $('#name').html(scores.name);
-    $('#score').html(scores.score);
-    $('#month').html(scores.month);
-    $('#day').html(scores.day);
-    $('#year').html(scores.year);
+    $('.user-name').html(scores.name);
+    $('.score').html(scores.score);
+    $('.month').html(scores.month);
+    $('.day').html(scores.day);
+    $('.year').html(scores.year);
 
 }
 
