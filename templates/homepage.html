@@ -8,7 +8,9 @@
 
 
 <div class="menu">
-    <form class="item" action="/notes" method="get">
+    <form class="item" action="/notes" method="post">
+        <input id="latitude" type="hidden" name="latitude" value="{{ latitude }}">
+        <input id="longitude" type="hidden" name="longitude" value="{{ longitude }}">        
         <input type="submit" value="Notes">
     </form>
 
@@ -23,20 +25,20 @@
 
 
 <script type="text/javascript">
-// Get the current location
+Get the current location
 
 
-// function getLocation() {
-//     if (navigator.geolocation) {
-//         navigator.geolocation.getCurrentPosition(showPos);
-//     }
-// }
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPos);
+    }
+}
 
-// function showPos(position) {
-//     document.getElementById("latitude").value = position.coords.latitude;
-//     document.getElementById("longitude").value = position.coords.longitude;
-// }
-// getLocation();
+function showPos(position) {
+    document.getElementById("latitude").value = position.coords.latitude;
+    document.getElementById("longitude").value = position.coords.longitude;
+}
+getLocation();
 
 </script>
 

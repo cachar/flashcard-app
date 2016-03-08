@@ -79,10 +79,13 @@ background-image: url("http://www.transparenttextures.com/patterns/natural-paper
 
   background-color: #66A8CB;
   color: #2B5069;
-
   text-transform: uppercase;
   font-size: 1rem;
 }
+
+/*.high-score-line {
+  padding: 0rem 1rem 0rem 2rem;
+}*/
 
 .name-input {
   font-size: 1.2rem;
@@ -175,6 +178,10 @@ h2 {
 }
 h1 {
   font-size: 4rem;
+}
+
+.flashcard-text {
+  font-size: 1.6rem;
 }
 
 .timestamp {

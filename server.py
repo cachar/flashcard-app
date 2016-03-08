@@ -94,7 +94,7 @@ def show_card_deck(id):
         if card_deck.scored:
             return redirect("/card_decks/%s/score" % id)
         else:
-            flash("End of flashcards!")
+            #flash("End of flashcards!")
             return redirect('/')
     else:
         return redirect('/cards/%s' % card.id)
@@ -156,12 +156,15 @@ def show_score(id):
 
 
 
-@app.route('/notes', methods=["GET"])
+@app.route('/notes', methods=["POST"])
 def show_notes():
     """Query API for politicians, then show in notes form. Query local
     database if API is down."""
 
+    latitude = request.form.get("latitude")
+    longitude = request.form.get("longitude")
 
+    load_politicians(latitude, longitude)
 
     politicians = Politician.query.all()
 

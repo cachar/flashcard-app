@@ -6,28 +6,28 @@
 
         <h2 class="score-head">High Scores</h2>
 
-        <div class="container" "score-data">
+        <div class="container score-data">
             <div class="score-table">
             <ol>
                 <table>
                 {% for high_score in high_scores %}
                     <tr>
-                        <td>
+                        <td><li>
                             <span class="user-name">{{ high_score.name }}</span></td>
                         <td><span class="score">{{ high_score.score }}</span></td>
                         <td class="timestamp">
                             <span class="month">{{ high_score.timestamp.month }}</span>-<span class="day">{{ high_score.timestamp.day }}</span>-<span class="year">{{ high_score.timestamp.year }}</span></td>
-                    
+                        </li>
                     </tr>
                 {% endfor %}
                 </table>
             </ol>
+            
+
+
             </div>
-
-
-
-            <p><input class="high-score-button" type="button" id="clear" name="clear" value="Clear High Scores"></p>
-
+            <p><span class="high-score-line"><input class="high-score-button" type="button" id="clear" name="clear" value="Clear High Scores"></span></p>
+            
         </div>
 
         <p class="home-link"><a href="/">Home</a></p>
