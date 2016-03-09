@@ -20,8 +20,9 @@ Python, Flask, SQLAlchemy, JavaScript, jQuery, AJAX, Jinja, CSS, Flexbox, Jasmin
 Running House of Cards requires an API key from the Sunlight Foundation, locally stored on a "secrets.sh" file.
 
 ```sh
-$ git clone https://github.com/cachar/flashcard-app.git flashcard-app
+$ git clone https://github.com/cachar/flashcard-app.git
 $ cd flashcard-app
+$ virtualenv env
 $ source env/bin/activate
 $ source secrets.sh
 $ pip install -r requirements.txt
